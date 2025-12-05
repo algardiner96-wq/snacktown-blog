@@ -16,7 +16,9 @@ class MenuItem(models.Model):
 class Review(models.Model):
     menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    rating = models.IntegerField()
+    rating = models.PositiveSmallIntegerField(
+        choices=[(i, i) for i in range(1, 6)]
+    )
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
