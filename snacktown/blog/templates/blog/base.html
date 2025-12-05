@@ -2,16 +2,23 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}Snacktown Blog{% endblock %}</title>
-  {% comment %} <link rel="stylesheet" href="{% static 'blog/css/style.css' %}"> {% endcomment %}
+  <title>Snacktown Blog</title>
 </head>
 <body>
-  <nav>
-    <a href="{% url 'blog_list' %}">Home</a>
-    <a href="{% url 'blog_create' %}">New Post</a>
-    <a href="#">Register</a>
-  </nav>
+ <nav>
+  {% if user.is_authenticated %}
+    <span>Welcome, {{ user.username }}!</span>
+    <form method="post" action="{% url 'logout' %}" style="display:inline;">
+      {% csrf_token %}
+      <button type="submit">Logout</button>
+    </form>
+  {% else %}
+    <a href="{% url 'login' %}">Login</a>
+    <a href="{% url 'register' %}">Register</a>
+  {% endif %}
+</nav>
 
-  {% block content %}{% endblock %}
+  {% block content %}
+  {% endblock %}
 </body>
 </html>

@@ -1,6 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from .models import BlogPost
 from .forms import BlogPostForm
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth import login 
 # Create your views here.
 
 
@@ -63,3 +65,21 @@ def blog_delete(request, pk):
         post.delete()
         return redirect('blog_list')
     return render(request, 'blog/blog_confirm_delete.html', {'post': post})
+
+
+def register(request):
+    """
+    User registration view.
+    - handles both GET and POST requests.
+    - creates a new user and logs them in upon successful registration.
+    - redirects to the blog list view after registration.
+    """
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('blog_list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'registration/register.html', {'form': form})
