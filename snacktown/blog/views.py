@@ -3,6 +3,7 @@ from .models import BlogPost
 from .forms import BlogPostForm
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login 
+from django.http import HttpResponseForbidden
 # Create your views here.
 
 
@@ -19,16 +20,15 @@ def blog_list(request):
 def blog_create(request):
     """
     Create a new blog post.
-    - handles both GET and POST requests.   
-    - Asigns the logged-in user as the author of the post.
-    - redirects to the blog list view upon successful creation.
+    - only superusers are allowed to create posts.
+    - on POST request, saves the new post and redirects to the blog list view.
     """
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Only superusers can create posts.")
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES)
         if form.is_valid():
-            post = form.save(commit=False)
-            post.author = request.user
-            post.save()
+            form.save()
             return redirect('blog_list')
     else:
         form = BlogPostForm()
@@ -38,10 +38,12 @@ def blog_create(request):
 def blog_update(request, pk):
     """
     Update an existing blog post.
-    - retrieves the BlogPost object by its primary key (pk).
-    - handles both GET and POST requests.
-    - redirects to the blog list view upon successful update.
+    - only superusers are allowed to edit posts.
+    - retrieves the BlogPost object by primary key (pk).
+    - on POST request, updates the post with the submitted data.
     """
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Only superusers can edit posts.")
     post = get_object_or_404(BlogPost, pk=pk)
     if request.method == 'POST':
         form = BlogPostForm(request.POST, request.FILES, instance=post)
@@ -55,11 +57,13 @@ def blog_update(request, pk):
 
 def blog_delete(request, pk):
     """
-    Delete a blog post.
-    - retrieves the BlogPost object by its primary key (pk).
-    - handles POST requests to confirm deletion.
-    - redirects to the blog list view upon successful deletion.
-    """
+     Delete a blog post.
+    - only superusers are allowed to delete posts.
+    - retrieves the BlogPost object by primary key (pk).
+    - on POST request, deletes the post and redirects to the blog list view.
+     """
+    if not request.user.is_superuser:
+        return HttpResponseForbidden("Only superusers can delete posts.")
     post = get_object_or_404(BlogPost, pk=pk)
     if request.method == 'POST':
         post.delete()
