@@ -11,16 +11,22 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+import os
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Load env vars from env.py when present (local/dev convenience)
+if os.path.isfile(BASE_DIR / "env.py"):
+    import env  # noqa: F401
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -75,10 +81,10 @@ WSGI_APPLICATION = 'snacktown.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600,
+    )
 }
 
 
