@@ -1,0 +1,11 @@
+core.microsoft*
+core.mongo*
+core.python*
+*.py[cod]
+node_modules/
+.venv/
+env.py
+__pycache__/
+cloudinary_python.txt
+.github/
+blog/fixtures/
