@@ -29,7 +29,7 @@ if os.path.isfile(BASE_DIR / "env.py"):
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['snacktown-blog-bc0d1066fe23.herokuapp.com' , 'localhost']
 
