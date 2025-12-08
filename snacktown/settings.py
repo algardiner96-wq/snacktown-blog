@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['snacktown-blog-bc0d1066fe23.herokuapp.com' , 'localhost']
 
 CSRF_TRUSTED_ORIGINS = ['https://*.codeinstitute-ide.net', 'https://*.herokuapp.com']
 # Application definition
@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'blog',
 ]
 
 MIDDLEWARE = [
