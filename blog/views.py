@@ -1,5 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 from .models import BlogPost, MenuItem, Review
+from .forms import ReviewForm
 
 
 def home(request):
@@ -39,8 +42,81 @@ def menu_item_reviews(request, pk):
     menu_item = get_object_or_404(MenuItem, pk=pk)
     reviews = Review.objects.filter(menu_item=menu_item).order_by('-created_at')
     
+    # Check if user already reviewed this item
+    user_review = None
+    if request.user.is_authenticated:
+        user_review = reviews.filter(user=request.user).first()
+    
     context = {
         'menu_item': menu_item,
         'reviews': reviews,
+        'user_review': user_review,
     }
     return render(request, 'blog/menu_item_reviews.html', context)
+
+
+@login_required
+def add_review(request, pk):
+    """Add a review for a menu item"""
+    menu_item = get_object_or_404(MenuItem, pk=pk)
+    
+    # Check if user already reviewed this item
+    existing_review = Review.objects.filter(menu_item=menu_item, user=request.user).first()
+    if existing_review:
+        messages.warning(request, 'You have already reviewed this item. Edit your existing review instead.')
+        return redirect('blog:menu_item_reviews', pk=pk)
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST)
+        if form.is_valid():
+            review = form.save(commit=False)
+            review.menu_item = menu_item
+            review.user = request.user
+            review.save()
+            messages.success(request, 'Review added successfully!')
+            return redirect('blog:menu_item_reviews', pk=pk)
+    else:
+        form = ReviewForm()
+    
+    return render(request, 'blog/review_form.html', {
+        'form': form,
+        'menu_item': menu_item,
+        'action': 'Add'
+    })
+
+
+@login_required
+def edit_review(request, pk):
+    """Edit a review"""
+    review = get_object_or_404(Review, pk=pk, user=request.user)
+    
+    if request.method == 'POST':
+        form = ReviewForm(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Review updated successfully!')
+            return redirect('blog:menu_item_reviews', pk=review.menu_item.pk)
+    else:
+        form = ReviewForm(instance=review)
+    
+    return render(request, 'blog/review_form.html', {
+        'form': form,
+        'menu_item': review.menu_item,
+        'action': 'Edit'
+    })
+
+
+@login_required
+def delete_review(request, pk):
+    """Delete a review"""
+    review = get_object_or_404(Review, pk=pk, user=request.user)
+    menu_item_pk = review.menu_item.pk
+    
+    if request.method == 'POST':
+        review.delete()
+        messages.success(request, 'Review deleted successfully!')
+        return redirect('blog:menu_item_reviews', pk=menu_item_pk)
+    
+    return render(request, 'blog/review_confirm_delete.html', {
+        'review': review
+    })

@@ -1,0 +1,21 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Delete Review{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Delete Review</h2>
+    
+    <div class="alert alert-warning">
+        <p>Are you sure you want to delete your review for <strong>{{ review.menu_item.name }}</strong>?</p>
+        <p><strong>Your rating:</strong> {{ review.rating }}/5</p>
+        <p><strong>Your comment:</strong> {{ review.comment }}</p>
+    </div>
+    
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+        <a href="{% url 'blog:menu_item_reviews' review.menu_item.pk %}" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>
+{% endblock %}

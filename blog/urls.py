@@ -9,4 +9,7 @@ urlpatterns = [
     path('blog/<int:pk>/', views.blog_detail, name='blog_detail'),
     path('menu/', views.menu_list, name='menu_list'),
     path('menu/<int:pk>/reviews/', views.menu_item_reviews, name='menu_item_reviews'),
+    path('menu/<int:pk>/review/add/', views.add_review, name='add_review'),
+    path('review/<int:pk>/edit/', views.edit_review, name='edit_review'),
+    path('review/<int:pk>/delete/', views.delete_review, name='delete_review'),
 ]
