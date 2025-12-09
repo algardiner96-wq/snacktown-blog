@@ -1,0 +1,53 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}Welcome to Snacktown Blog{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Welcome To Snacktown Blog</h1>
+    
+    <section class="about">
+        <h2>About Snacktown</h2>
+        <p>Welcome to Snacktown - your ultimate destination for delicious food reviews and culinary adventures!</p>
+    </section>
+
+    <section class="menu">
+        <h2>Menu</h2>
+        <div class="menu-items">
+            {% for item in menu_items %}
+            <div class="menu-item">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description }}</p>
+                <a href="{% url 'blog:menu_item_reviews' item.pk %}">View Reviews</a>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'blog:menu_list' %}">View All Menu Items</a>
+    </section>
+
+    <section class="recent-reviews">
+        <h2>Most Recent Reviews</h2>
+        {% for review in recent_reviews %}
+        <div class="review">
+            <p><strong>{{ review.menu_item.name }}</strong> - {{ review.rating }}/5 stars</p>
+            <p>{{ review.comment|truncatewords:20 }}</p>
+            <small>by {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}</small>
+        </div>
+        {% endfor %}
+    </section>
+
+    <section class="blog-posts">
+        <h2>Blog Posts</h2>
+        <div class="posts-grid">
+            {% for post in recent_posts %}
+            <div class="blog-post">
+                <h3>{{ post.title }}</h3>
+                <p>{{ post.content|truncatewords:30 }}</p>
+                <a href="{% url 'blog:blog_detail' post.pk %}">Read More</a>
+            </div>
+            {% endfor %}
+        </div>
+        <a href="{% url 'blog:blog_list' %}">View All Posts</a>
+    </section>
+</div>
+{% endblock %}
