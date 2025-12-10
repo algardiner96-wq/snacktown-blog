@@ -1,0 +1,57 @@
+{% extends 'blog/base.html' %}
+
+{% block title %}{{ action }} Blog Post{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <h2>{{ action }} Blog Post</h2>
+
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+
+                <div class="mb-3">
+                    <label for="title" class="form-label">Title</label>
+                    <input 
+                        type="text" 
+                        class="form-control" 
+                        id="title" 
+                        name="title" 
+                        value="{{ post.title|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <div class="mb-3">
+                    <label for="content" class="form-label">Content</label>
+                    <textarea 
+                        class="form-control" 
+                        id="content" 
+                        name="content" 
+                        rows="8"
+                        required
+                    >{{ post.content|default:'' }}</textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label for="image" class="form-label">Image (optional)</label>
+                    <input 
+                        type="file" 
+                        class="form-control" 
+                        id="image" 
+                        name="image" 
+                        accept="image/*"
+                    >
+                    {% if post.image %}
+                        <small class="text-muted">Current image: <img src="{{ post.image.url }}" style="max-width: 100px;"></small>
+                    {% endif %}
+                </div>
+
+                <button type="submit" class="btn btn-primary">{{ action }} Post</button>
+                <a href="{% url 'blog:blog_list' %}" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

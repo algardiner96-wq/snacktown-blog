@@ -12,7 +12,10 @@ urlpatterns = [
     # Blog
     path('', views.home, name='home'),
     path('blog/', views.blog_list, name='blog_list'),
+    path('blog/add/', views.add_blog_post, name='add_blog_post'),
     path('blog/<int:pk>/', views.blog_detail, name='blog_detail'),
+    path('blog/<int:pk>/edit/', views.edit_blog_post, name='edit_blog_post'),
+    path('blog/<int:pk>/delete/', views.delete_blog_post, name='delete_blog_post'),
     
     # Menu & Reviews
     path('menu/', views.menu_list, name='menu_list'),

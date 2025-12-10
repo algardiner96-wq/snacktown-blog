@@ -78,6 +78,75 @@ def blog_detail(request, pk):
     return render(request, 'blog/blog_detail.html', {'post': post})
 
 
+@login_required
+def add_blog_post(request):
+    """Create a new blog post (admin only)"""
+    if not request.user.is_staff:
+        messages.error(request, 'Only admins can create blog posts.')
+        return redirect('blog:blog_list')
+    
+    if request.method == 'POST':
+        title = request.POST.get('title')
+        content = request.POST.get('content')
+        image = request.FILES.get('image')
+        
+        if title and content:
+            post = BlogPost.objects.create(
+                title=title,
+                content=content,
+                author=request.user,
+                image=image
+            )
+            messages.success(request, f"Blog post '{title}' created by {request.user.username}!")
+            return redirect('blog:blog_detail', pk=post.pk)
+        else:
+            messages.error(request, 'Title and content are required.')
+    
+    return render(request, 'blog/blog_form.html', {'action': 'Add'})
+
+
+@login_required
+def edit_blog_post(request, pk):
+    """Edit a blog post (admin only)"""
+    post = get_object_or_404(BlogPost, pk=pk)
+    
+    if not request.user.is_staff:
+        messages.error(request, 'Only admins can edit blog posts.')
+        return redirect('blog:blog_detail', pk=pk)
+    
+    if request.method == 'POST':
+        post.title = request.POST.get('title', post.title)
+        post.content = request.POST.get('content', post.content)
+        if request.FILES.get('image'):
+            post.image = request.FILES.get('image')
+        post.save()
+        messages.success(request, f"Blog post '{post.title}' updated by {request.user.username}!")
+        return redirect('blog:blog_detail', pk=post.pk)
+    
+    return render(request, 'blog/blog_form.html', {
+        'post': post,
+        'action': 'Edit'
+    })
+
+
+@login_required
+def delete_blog_post(request, pk):
+    """Delete a blog post (admin only)"""
+    post = get_object_or_404(BlogPost, pk=pk)
+    title = post.title
+    
+    if not request.user.is_staff:
+        messages.error(request, 'Only admins can delete blog posts.')
+        return redirect('blog:blog_detail', pk=pk)
+    
+    if request.method == 'POST':
+        post.delete()
+        messages.success(request, f"Blog post '{title}' deleted by {request.user.username}!")
+        return redirect('blog:blog_list')
+    
+    return render(request, 'blog/blog_confirm_delete.html', {'post': post})
+
+
 def menu_list(request):
     """List all menu items"""
     items = MenuItem.objects.all()
