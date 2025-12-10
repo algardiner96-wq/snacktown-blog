@@ -45,6 +45,7 @@ class Review(models.Model):
     )
     comment = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    approved = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.user} → {self.menu_item} ({self.rating})"

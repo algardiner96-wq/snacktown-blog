@@ -1,15 +1,58 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
 from .models import BlogPost, MenuItem, Review
-from .forms import ReviewForm
+from .forms import ReviewForm, RegisterForm, LoginForm
+
+
+def register(request):
+    """Register a new user"""
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            messages.success(request, 'Registration successful! You are now logged in.')
+            return redirect('blog:home')
+    else:
+        form = RegisterForm()
+    
+    return render(request, 'blog/register.html', {'form': form})
+
+
+def user_login(request):
+    """Login user"""
+    if request.method == 'POST':
+        form = LoginForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            user = authenticate(request, username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.success(request, f'Welcome back, {username}!')
+                return redirect('blog:home')
+            else:
+                messages.error(request, 'Invalid username or password.')
+    else:
+        form = LoginForm()
+    
+    return render(request, 'blog/login.html', {'form': form})
+
+
+def user_logout(request):
+    """Logout user"""
+    logout(request)
+    messages.success(request, 'You have been logged out.')
+    return redirect('blog:home')
 
 
 def home(request):
     """Homepage with recent blog posts and menu items"""
     recent_posts = BlogPost.objects.order_by('-created_at')[:2]
     menu_items = MenuItem.objects.all()[:3]
-    recent_reviews = Review.objects.order_by('-created_at')[:5]
+    recent_reviews = Review.objects.filter(approved=True).order_by('-created_at')[:5]
     
     context = {
         'recent_posts': recent_posts,
@@ -40,12 +83,12 @@ def menu_list(request):
 def menu_item_reviews(request, pk):
     """Reviews for a specific menu item"""
     menu_item = get_object_or_404(MenuItem, pk=pk)
-    reviews = Review.objects.filter(menu_item=menu_item).order_by('-created_at')
+    reviews = Review.objects.filter(menu_item=menu_item, approved=True).order_by('-created_at')
     
     # Check if user already reviewed this item
     user_review = None
     if request.user.is_authenticated:
-        user_review = reviews.filter(user=request.user).first()
+        user_review = Review.objects.filter(menu_item=menu_item, user=request.user).first()
     
     context = {
         'menu_item': menu_item,

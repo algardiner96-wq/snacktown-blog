@@ -15,10 +15,11 @@
                     <li class="nav-item"><a class="nav-link" href="{% url 'blog:blog_list' %}">Blog</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'blog:menu_list' %}">Menu</a></li>
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="#">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link">{{ user.username }}</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'blog:logout' %}">Logout</a></li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="#">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Register</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'blog:login' %}">Login</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'blog:register' %}">Register</a></li>
                     {% endif %}
                 </ul>
             </div>

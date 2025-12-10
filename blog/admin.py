@@ -17,6 +17,17 @@ class MenuItemAdmin(admin.ModelAdmin):
 
 @admin.register(Review)
 class ReviewAdmin(admin.ModelAdmin):
-    list_display = ('menu_item', 'user', 'rating', 'created_at')
-    list_filter = ('rating', 'created_at', 'menu_item')
+    list_display = ('menu_item', 'user', 'rating', 'created_at', 'approved')
+    list_filter = ('rating', 'created_at', 'menu_item', 'approved')
     search_fields = ('comment', 'user__username', 'menu_item__name')
+    actions = ['approve_reviews', 'disapprove_reviews']
+    
+    def approve_reviews(self, request, queryset):
+        """Admin action to approve reviews"""
+        queryset.update(approved=True)
+        self.message_user(request, f'{queryset.count()} reviews approved.')
+    
+    def disapprove_reviews(self, request, queryset):
+        """Admin action to disapprove reviews"""
+        queryset.update(approved=False)
+        self.message_user(request, f'{queryset.count()} reviews disapproved.')
