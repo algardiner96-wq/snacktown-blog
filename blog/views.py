@@ -13,7 +13,7 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, 'Registration successful! You are now logged in.')
+            messages.success(request, f"Welcome {user.username}! You are now logged in.")
             return redirect('blog:home')
     else:
         form = RegisterForm()
@@ -31,7 +31,7 @@ def user_login(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                messages.success(request, f'Welcome back, {username}!')
+                messages.success(request, f"Welcome back, {username}!")
                 return redirect('blog:home')
             else:
                 messages.error(request, 'Invalid username or password.')
@@ -43,8 +43,12 @@ def user_login(request):
 
 def user_logout(request):
     """Logout user"""
+    username = request.user.username if request.user.is_authenticated else ''
     logout(request)
-    messages.success(request, 'You have been logged out.')
+    if username:
+        messages.success(request, f"Goodbye {username}, you have been logged out.")
+    else:
+        messages.success(request, 'You have been logged out.')
     return redirect('blog:home')
 
 
@@ -116,7 +120,10 @@ def add_review(request, pk):
             review.menu_item = menu_item
             review.user = request.user
             review.save()
-            messages.success(request, 'Review added successfully!')
+            messages.success(
+                request,
+                f"Thanks {request.user.username}, your review for {menu_item.name} was submitted and awaits approval."
+            )
             return redirect('blog:menu_item_reviews', pk=pk)
     else:
         form = ReviewForm()
@@ -137,7 +144,10 @@ def edit_review(request, pk):
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Review updated successfully!')
+            messages.success(
+                request,
+                f"Updated your review for {review.menu_item.name}, {request.user.username}."
+            )
             return redirect('blog:menu_item_reviews', pk=review.menu_item.pk)
     else:
         form = ReviewForm(instance=review)
@@ -157,7 +167,10 @@ def delete_review(request, pk):
     
     if request.method == 'POST':
         review.delete()
-        messages.success(request, 'Review deleted successfully!')
+        messages.success(
+            request,
+            f"Deleted your review for {review.menu_item.name}, {request.user.username}."
+        )
         return redirect('blog:menu_item_reviews', pk=menu_item_pk)
     
     return render(request, 'blog/review_confirm_delete.html', {
