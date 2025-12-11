@@ -55,7 +55,7 @@ def user_logout(request):
 def home(request):
     """Homepage with recent blog posts and menu items"""
     recent_posts = BlogPost.objects.order_by('-created_at')[:2]
-    menu_items = MenuItem.objects.all()[:3]
+    menu_items = MenuItem.objects.all()  # All menu items for carousel
     
     # Filter reviews by menu item if specified
     menu_filter = request.GET.get('menu_item', '')

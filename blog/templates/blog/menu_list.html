@@ -1,0 +1,35 @@
+{% extends 'blog/base.html' %}
+{% load cloudinary %}
+
+{% block title %}Menu - Snacktown Blog{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Our Menu</h1>
+    
+    {% if items %}
+        <div class="row">
+            {% for item in items %}
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100">
+                        {% if item.image %}
+                            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}" style="height: 200px; object-fit: cover;">
+                        {% else %}
+                            <div class="card-img-top bg-secondary d-flex align-items-center justify-content-center" style="height: 200px;">
+                                <span class="text-white">No Image</span>
+                            </div>
+                        {% endif %}
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.name }}</h5>
+                            <p class="card-text">{{ item.description }}</p>
+                            <a href="{% url 'blog:menu_item_reviews' item.pk %}" class="btn btn-primary">View Reviews</a>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="alert alert-info">No menu items available yet.</div>
+    {% endif %}
+</div>
+{% endblock %}
