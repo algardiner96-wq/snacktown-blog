@@ -32,7 +32,19 @@ SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q7t2f3hls5(1aii!1t1ke
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
-ALLOWED_HOSTS = ['snacktown-blog-bc0d1066fe23.herokuapp.com' , '127.0.0.1']
+default_allowed_hosts = [
+    'snacktown-blog-bc0d1066fe23.herokuapp.com',
+    '.herokuapp.com',
+    'localhost',
+    '127.0.0.1',
+]
+
+env_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
+
+if env_allowed_hosts:
+    ALLOWED_HOSTS = [host.strip() for host in env_allowed_hosts.split(',') if host.strip()]
+else:
+    ALLOWED_HOSTS = default_allowed_hosts
 
 CSRF_TRUSTED_ORIGINS = ['https://*.codeinstitute-ide.net', 'https://*.herokuapp.com']
 # Application definition
