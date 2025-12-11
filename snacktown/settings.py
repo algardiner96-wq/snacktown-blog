@@ -31,7 +31,7 @@ if os.path.isfile(BASE_DIR / "env.py"):
 SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 default_allowed_hosts = [
     'snacktown-blog-bc0d1066fe23.herokuapp.com',
     '.herokuapp.com',
@@ -153,15 +153,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_MANIFEST_STRICT = False
 
 # Cloudinary configuration
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-
-cloudinary.config(
-    cloud_name=os.environ.get('CLOUDINARY_CLOUD_NAME'),
-    api_key=os.environ.get('CLOUDINARY_API_KEY'),
-    api_secret=os.environ.get('CLOUDINARY_API_SECRET'),
-)
+# cloudinary_storage auto-reads CLOUDINARY_URL env var, no manual config needed
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
