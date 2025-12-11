@@ -9,7 +9,7 @@
     <section class="welcome-banner" aria-label="Welcome to Snacktown">
         <div class="checker checker-top" aria-hidden="true"></div>
         <div class="welcome-content">
-            <img src="{% static 'images/mascot.png' %}" alt="Snacktown Mascot" class="mascot" />
+            <img src="{% static 'images/mascot.png' %}" alt="Snacktown cookie Mascot" class="mascot" />
             <h1 class="welcome-title">WELCOME TO</h1>
             <h1 class="welcome-title strong">SNACKTOWN</h1>
         </div>
@@ -18,9 +18,7 @@
     
     <section class="about">
         <h2>About Snacktown</h2>
-        <p class="about-text">Welcome to Snacktown - your ultimate destination for delicious food reviews and culinary adventures!</p>
-    </section>
-
+        <p class="about-text"> Snacktown blog is your go-to source for our snacktown fast food updates for us to show we do listen to complaints even if we don't always act on them. Here, we share exciting news, mouth-watering menu items, and behind-the-scenes glimpses of our culinary adventures. Whether you're a devoted fan or a curious foodie, our blog is designed to keep you informed. Join us as we explore the world of fast food, with our lil' snack, you'll never get better. No forks, no shame. It's Snacktown</p>
     <section class="menu">
         <h2>Menu</h2>
         
@@ -53,12 +51,12 @@
         <a href="{% url 'blog:menu_list' %}" class="btn btn-secondary mt-4">View All Menu Items</a>
     </section>
 
-    <section class="recent-reviews">
+    <section class="recent-reviews" id="recent-reviews">
         <h2>Most Recent Reviews</h2>
         
         <div class="mb-3">
             <label for="menu-filter" class="form-label">Filter by Menu Item:</label>
-            <form method="get" class="d-flex gap-2">
+            <form method="get" action="{% url 'blog:home' %}#recent-reviews" class="d-flex gap-2">
                 <select id="menu-filter" name="menu_item" class="form-select" style="max-width: 300px;">
                     <option value="">All Menu Items</option>
                     {% for item in all_menu_items %}
@@ -69,7 +67,7 @@
                 </select>
                 <button type="submit" class="btn btn-primary">Filter</button>
                 {% if selected_menu_item %}
-                    <a href="{% url 'blog:home' %}" class="btn btn-secondary">Clear</a>
+                    <a href="{% url 'blog:home' %}#recent-reviews" class="btn btn-secondary">Clear</a>
                 {% endif %}
             </form>
         </div>
@@ -92,6 +90,31 @@
         <div class="posts-grid">
             {% for post in recent_posts %}
             <div class="blog-post">
+                {% if post.image %}
+                    {% with post.title|lower as title_lower %}
+                        {% if title_lower == "snacktown goes green" %}
+                            <img src="{{ post.image.url }}" alt="man eating beige goo with fingers in snacktown booth" class="blog-post-image">
+                        {% elif title_lower == "behind the goo" %}
+                            <img src="{{ post.image.url }}" alt="tired elderly female grill cook in apron smoking" class="blog-post-image">
+                        {% elif title_lower == "staff clothes now mandatory" %}
+                            <img src="{{ post.image.url }}" alt="man in rags cleaning toilet floor" class="blog-post-image">
+                        {% elif title_lower == "discontinued lil snack meals" %}
+                            <img src="{{ post.image.url }}" alt="snacktown meal box with tiny saw" class="blog-post-image">
+                        {% elif title_lower == "snacktown mascot allegations" %}
+                            <img src="{{ post.image.url }}" alt="mascot holding whiskey bottle" class="blog-post-image">
+                        {% elif title_lower == "important warning" %}
+                            <img src="{{ post.image.url }}" alt="warning label" class="blog-post-image">
+                        {% elif title_lower == "all our meat is found locally" %}
+                            <img src="{{ post.image.url }}" alt="mascot and shifty bald man in glasses exchange weird meat in an alley" class="blog-post-image">
+                        {% elif title_lower == "snacktown official merchandise" %}
+                            <img src="{{ post.image.url }}" alt="surgical stockings, bib and nappy in branded colours and style" class="blog-post-image">
+                        {% elif title_lower == "second toilets installed" %}
+                            <img src="{{ post.image.url }}" alt="large queue of people waiting for toilet holding their stomachs" class="blog-post-image">
+                        {% else %}
+                            <img src="{{ post.image.url }}" alt="{{ post.title }}" class="blog-post-image">
+                        {% endif %}
+                    {% endwith %}
+                {% endif %}
                 <h3>{{ post.title }}</h3>
                 <p>{{ post.content|truncatewords:30 }}</p>
                 <a href="{% url 'blog:blog_detail' post.pk %}">Read More</a>

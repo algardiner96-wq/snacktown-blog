@@ -4,7 +4,7 @@
 
 {% block content %}
 <div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4 blog-header">
         <h2>Blog Posts</h2>
         {% if user.is_staff %}
             <a href="{% url 'blog:add_blog_post' %}" class="btn btn-primary">Write Post</a>
@@ -17,7 +17,29 @@
                 <div class="col-md-6 mb-4">
                     <div class="card">
                         {% if post.image %}
-                            <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                            {% with post.title|lower as title_lower %}
+                                {% if title_lower == "snacktown goes green" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="man eating beige goo with fingers in snacktown booth">
+                                {% elif title_lower == "behind the goo" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="tired elderly female grill cook in apron smoking">
+                                {% elif title_lower == "staff clothes now mandatory" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="man in rags cleaning toilet floor">
+                                {% elif title_lower == "discontinued lil snack meals" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="snacktown meal box with tiny saw">
+                                {% elif title_lower == "snacktown mascot allegations" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="mascot holding whiskey bottle">
+                                {% elif title_lower == "important warning" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="warning label">
+                                {% elif title_lower == "all our meat is found locally" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="mascot and shifty bald man in glasses exchange weird meat in an alley">
+                                {% elif title_lower == "snacktown official merchandise" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="surgical stockings, bib and nappy in branded colours and style">
+                                {% elif title_lower == "second toilets installed" %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="large queue of people waiting for toilet holding their stomachs">
+                                {% else %}
+                                    <img src="{{ post.image.url }}" class="card-img-top" alt="{{ post.title }}">
+                                {% endif %}
+                            {% endwith %}
                         {% endif %}
                         <div class="card-body">
                             <h5 class="card-title">{{ post.title }}</h5>
