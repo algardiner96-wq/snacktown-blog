@@ -27,13 +27,36 @@
 
     <section class="recent-reviews">
         <h2>Most Recent Reviews</h2>
-        {% for review in recent_reviews %}
-        <div class="review">
-            <p><strong>{{ review.menu_item.name }}</strong> - {{ review.rating }}/5 stars</p>
-            <p>{{ review.comment|truncatewords:20 }}</p>
-            <small>by {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}</small>
+        
+        <div class="mb-3">
+            <label for="menu-filter" class="form-label">Filter by Menu Item:</label>
+            <form method="get" class="d-flex gap-2">
+                <select id="menu-filter" name="menu_item" class="form-select" style="max-width: 300px;">
+                    <option value="">All Menu Items</option>
+                    {% for item in all_menu_items %}
+                        <option value="{{ item.pk }}" {% if selected_menu_item|stringformat:"s" == item.pk|stringformat:"s" %}selected{% endif %}>
+                            {{ item.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Filter</button>
+                {% if selected_menu_item %}
+                    <a href="{% url 'blog:home' %}" class="btn btn-secondary">Clear</a>
+                {% endif %}
+            </form>
         </div>
-        {% endfor %}
+
+        {% if recent_reviews %}
+            {% for review in recent_reviews %}
+            <div class="review alert alert-info">
+                <p><strong>{{ review.menu_item.name }}</strong> - {{ review.rating }}/5 stars</p>
+                <p>{{ review.comment|truncatewords:20 }}</p>
+                <small>by {{ review.user.username }} on {{ review.created_at|date:"M d, Y" }}</small>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No reviews found for this filter.</p>
+        {% endif %}
     </section>
 
     <section class="blog-posts">

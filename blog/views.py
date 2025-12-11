@@ -56,12 +56,26 @@ def home(request):
     """Homepage with recent blog posts and menu items"""
     recent_posts = BlogPost.objects.order_by('-created_at')[:2]
     menu_items = MenuItem.objects.all()[:3]
-    recent_reviews = Review.objects.filter(approved=True).order_by('-created_at')[:5]
+    
+    # Filter reviews by menu item if specified
+    menu_filter = request.GET.get('menu_item', '')
+    if menu_filter:
+        recent_reviews = Review.objects.filter(
+            approved=True,
+            menu_item_id=menu_filter
+        ).order_by('-created_at')[:10]
+    else:
+        recent_reviews = Review.objects.filter(approved=True).order_by('-created_at')[:5]
+    
+    # Get all menu items for dropdown
+    all_menu_items = MenuItem.objects.all()
     
     context = {
         'recent_posts': recent_posts,
         'menu_items': menu_items,
         'recent_reviews': recent_reviews,
+        'all_menu_items': all_menu_items,
+        'selected_menu_item': menu_filter,
     }
     return render(request, 'blog/home.html', context)
 
