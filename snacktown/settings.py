@@ -153,7 +153,11 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 WHITENOISE_MANIFEST_STRICT = False
 
 # Cloudinary configuration
-# cloudinary_storage auto-reads CLOUDINARY_URL env var, no manual config needed
+import cloudinary
+
+# Ensure secure (https) delivery from Cloudinary to avoid mixed-content warnings
+cloudinary.config(secure=True)
+CLOUDINARY_STORAGE = {'SECURE': True}
 
 MEDIA_URL = '/media/'
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'

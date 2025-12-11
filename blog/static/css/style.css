@@ -136,6 +136,17 @@ a:hover {
     border-color: var(--secondary) !important;
 }
 
+.navbar-toggler {
+    border: 2px solid var(--primary);
+    color: var(--primary);
+    background: var(--accent);
+    padding: 6px 10px;
+}
+
+.navbar-toggler:focus {
+    box-shadow: none;
+}
+
 /* Sections */
 section {
     margin: 30px 0;
@@ -406,6 +417,74 @@ section h2 {
     align-self: flex-start;
     margin: 0 15px 15px 15px;
     font-weight: bold;
+
+/* Responsive tweaks */
+@media (max-width: 991px) {
+    .navbar {
+        padding: 12px 16px;
+        gap: 12px;
+    }
+    .navbar-nav {
+        gap: 8px;
+    }
+    .nav-link {
+        width: 100%;
+        text-align: center;
+    }
+    .container {
+        padding: 16px;
+    }
+    .menu-carousel {
+        gap: 12px;
+        padding: 14px;
+    }
+    .menu-item-card {
+        width: 160px;
+        min-height: 240px;
+    }
+    .menu-item-image,
+    .menu-item-image-placeholder {
+        height: 150px;
+    }
+    .welcome-title {
+        font-size: 2.2rem;
+    }
+    .welcome-title.strong {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 575px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+    h2 {
+        font-size: 1.8rem;
+    }
+    h3 {
+        font-size: 1.2rem;
+    }
+    .navbar {
+        padding: 10px 14px;
+    }
+    .menu-carousel {
+        min-height: 0;
+    }
+    .menu-item-card {
+        width: 140px;
+        min-height: 210px;
+    }
+    .menu-item-image,
+    .menu-item-image-placeholder {
+        height: 130px;
+    }
+    .welcome-content .mascot {
+        height: 120px;
+    }
+    .container {
+        padding: 12px;
+    }
+}
     color: var(--primary);
 }
 
