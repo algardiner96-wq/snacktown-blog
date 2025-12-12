@@ -153,6 +153,7 @@ section {
     padding: 20px;
     border: 2px solid var(--text);
     background-color: var(--dark-accent);
+    min-height: 100px;
 }
 
 section h2 {
@@ -242,10 +243,12 @@ section h2 {
 
 .menu-item-image {
     width: 100%;
+    max-width: 100%;
     height: 180px;
     object-fit: cover;
     border-bottom: 2px solid var(--text);
     display: block;
+    aspect-ratio: 1;
 }
 
 .menu-item-image-placeholder {
@@ -259,6 +262,7 @@ section h2 {
     font-weight: bold;
     border-bottom: 2px solid var(--text);
     flex-shrink: 0;
+    aspect-ratio: 1;
 }
 
 .menu-item-name {
@@ -378,7 +382,7 @@ section h2 {
 /* Blog Posts Grid */
 .posts-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
     gap: 20px;
     margin: 20px 0;
 }
@@ -392,11 +396,25 @@ section h2 {
     overflow: hidden;
 }
 
+.card {
+    max-width: 100%;
+}
+
+.card-img-top {
+    max-width: 100%;
+    aspect-ratio: 4/3;
+    object-fit: cover;
+}
+
 .blog-post-image {
     width: 100%;
+    max-width: 100%;
     height: auto;
+    max-height: 350px;
     object-fit: cover;
     border-bottom: 2px solid var(--text);
+    display: block;
+    aspect-ratio: 4/3;
 }
 
 .blog-post h3 {
@@ -483,6 +501,52 @@ section h2 {
     }
     .container {
         padding: 12px;
+    }
+    .posts-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+    body {
+        overflow-x: hidden;
+    }
+    .container {
+        max-width: 100vw;
+        overflow-x: hidden;
+        padding-left: 12px;
+        padding-right: 12px;
+    }
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .col-md-6 {
+        padding-left: 0;
+        padding-right: 0;
+        margin-bottom: 16px;
+    }
+    .card {
+        margin-left: 0;
+        margin-right: 0;
+        border-left: 0;
+        border-right: 0;
+    }
+    .blog-post {
+        margin-left: 0;
+        margin-right: 0;
+    }
+    .blog-post-image,
+    .card-img-top {
+        max-height: 200px;
+        width: 100%;
+        object-fit: cover;
+        margin: 0;
+        padding: 0;
+        display: block;
+    }
+    section {
+        padding: 14px 12px;
+        margin-left: 0;
+        margin-right: 0;
     }
 }
     color: var(--primary);

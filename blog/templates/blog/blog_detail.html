@@ -8,25 +8,25 @@
         {% if post.image %}
             {% with post.title|lower as title_lower %}
                 {% if title_lower == "snacktown goes green" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="man eating beige goo with fingers in snacktown booth" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="man eating beige goo with fingers in snacktown booth" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "behind the goo" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="tired elderly female grill cook in apron smoking" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="tired elderly female grill cook in apron smoking" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "staff clothes now mandatory" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="man in rags cleaning toilet floor" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="man in rags cleaning toilet floor" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "discontinued lil snack meals" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="snacktown meal box with tiny saw" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="snacktown meal box with tiny saw" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "snacktown mascot allegations" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="mascot holding whiskey bottle" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="mascot holding whiskey bottle" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "important warning" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="warning label" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="warning label" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "all our meat is found locally" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="mascot and shifty bald man in glasses exchange weird meat in an alley" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="mascot and shifty bald man in glasses exchange weird meat in an alley" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "snacktown official merchandise" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="surgical stockings, bib and nappy in branded colours and style" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="surgical stockings, bib and nappy in branded colours and style" style="width: 100%; max-width: 600px; height: auto;">
                 {% elif title_lower == "second toilets installed" %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="large queue of people waiting for toilet holding their stomachs" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="large queue of people waiting for toilet holding their stomachs" style="width: 100%; max-width: 600px; height: auto;">
                 {% else %}
-                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="{{ post.title }}" style="max-width: 600px;">
+                    <img src="{{ post.image.url }}" class="img-fluid mb-4" alt="{{ post.title }}" style="width: 100%; max-width: 600px; height: auto;">
                 {% endif %}
             {% endwith %}
         {% endif %}

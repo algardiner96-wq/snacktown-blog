@@ -9,7 +9,7 @@
     <section class="welcome-banner" aria-label="Welcome to Snacktown">
         <div class="checker checker-top" aria-hidden="true"></div>
         <div class="welcome-content">
-            <img src="{% static 'images/mascot.png' %}" alt="Snacktown cookie Mascot" class="mascot" />
+            <img src="{% static 'images/mascot.png' %}" alt="Snacktown cookie Mascot" class="mascot" fetchpriority="high" />
             <h1 class="welcome-title">WELCOME TO</h1>
             <h1 class="welcome-title strong">SNACKTOWN</h1>
         </div>
@@ -34,7 +34,7 @@
             <div class="carousel-item">
                 <div class="menu-item-card">
                     {% if item.image %}
-                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-item-image">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-item-image" loading="lazy">
                     {% else %}
                         <div class="menu-item-image-placeholder">No Image</div>
                     {% endif %}
@@ -93,7 +93,7 @@
                 {% if post.image %}
                     {% with post.title|lower as title_lower %}
                         {% if title_lower == "snacktown goes green" %}
-                            <img src="{{ post.image.url }}" alt="man eating beige goo with fingers in snacktown booth" class="blog-post-image">
+                            <img src="{{ post.image.url }}" alt="man eating beige goo with fingers in snacktown booth" class="blog-post-image" loading="lazy">
                         {% elif title_lower == "behind the goo" %}
                             <img src="{{ post.image.url }}" alt="tired elderly female grill cook in apron smoking" class="blog-post-image">
                         {% elif title_lower == "staff clothes now mandatory" %}
