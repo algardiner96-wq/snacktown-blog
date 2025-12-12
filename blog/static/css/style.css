@@ -435,6 +435,7 @@ section h2 {
     align-self: flex-start;
     margin: 0 15px 15px 15px;
     font-weight: bold;
+}
 
 /* Responsive tweaks */
 @media (max-width: 991px) {
