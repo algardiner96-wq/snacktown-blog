@@ -549,9 +549,6 @@ section h2 {
         margin-right: 0;
     }
 }
-    color: var(--primary);
-}
-
 .blog-post h3 {
     margin-top: 0;
     border-bottom: 1px solid var(--text);
