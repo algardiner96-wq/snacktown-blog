@@ -13,11 +13,14 @@ def register(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            messages.success(request, f"Welcome {user.username}! You are now logged in.")
+            messages.success(
+                request,
+                f"Welcome {user.username}! You are now logged in."
+            )
             return redirect('blog:home')
     else:
         form = RegisterForm()
-    
+
     return render(request, 'blog/register.html', {'form': form})
 
 
@@ -37,7 +40,7 @@ def user_login(request):
                 messages.error(request, 'Invalid username or password.')
     else:
         form = LoginForm()
-    
+
     return render(request, 'blog/login.html', {'form': form})
 
 
@@ -46,7 +49,9 @@ def user_logout(request):
     username = request.user.username if request.user.is_authenticated else ''
     logout(request)
     if username:
-        messages.success(request, f"Goodbye {username}, you have been logged out.")
+        messages.success(
+            request, f"Goodbye {username}, you have been logged out."
+        )
     else:
         messages.success(request, 'You have been logged out.')
     return redirect('blog:home')
@@ -54,9 +59,9 @@ def user_logout(request):
 
 def home(request):
     """Homepage with recent blog posts and menu items"""
-    recent_posts = BlogPost.objects.order_by('?')[:2]  # Random 2 blog posts
+    recent_posts = BlogPost.objects.order_by('?')[:2]  # Random 2
     menu_items = MenuItem.objects.all()  # All menu items for carousel
-    
+
     # Filter reviews by menu item if specified
     menu_filter = request.GET.get('menu_item', '')
     if menu_filter:
@@ -65,11 +70,13 @@ def home(request):
             menu_item_id=menu_filter
         ).order_by('-created_at')[:10]
     else:
-        recent_reviews = Review.objects.filter(approved=True).order_by('-created_at')[:5]
-    
+        recent_reviews = Review.objects.filter(
+            approved=True
+        ).order_by('-created_at')[:5]
+
     # Get all menu items for dropdown
     all_menu_items = MenuItem.objects.all()
-    
+
     context = {
         'recent_posts': recent_posts,
         'menu_items': menu_items,
@@ -98,12 +105,12 @@ def add_blog_post(request):
     if not request.user.is_staff:
         messages.error(request, 'Only admins can create blog posts.')
         return redirect('blog:blog_list')
-    
+
     if request.method == 'POST':
         title = request.POST.get('title')
         content = request.POST.get('content')
         image = request.FILES.get('image')
-        
+
         if title and content:
             post = BlogPost.objects.create(
                 title=title,
@@ -111,11 +118,14 @@ def add_blog_post(request):
                 author=request.user,
                 image=image
             )
-            messages.success(request, f"Blog post '{title}' created by {request.user.username}!")
+            messages.success(
+                request,
+                f"Blog post '{title}' created by {request.user.username}!"
+            )
             return redirect('blog:blog_detail', pk=post.pk)
         else:
             messages.error(request, 'Title and content are required.')
-    
+
     return render(request, 'blog/blog_form.html', {'action': 'Add'})
 
 
@@ -123,20 +133,23 @@ def add_blog_post(request):
 def edit_blog_post(request, pk):
     """Edit a blog post (admin only)"""
     post = get_object_or_404(BlogPost, pk=pk)
-    
+
     if not request.user.is_staff:
         messages.error(request, 'Only admins can edit blog posts.')
         return redirect('blog:blog_detail', pk=pk)
-    
+
     if request.method == 'POST':
         post.title = request.POST.get('title', post.title)
         post.content = request.POST.get('content', post.content)
         if request.FILES.get('image'):
             post.image = request.FILES.get('image')
         post.save()
-        messages.success(request, f"Blog post '{post.title}' updated by {request.user.username}!")
+        messages.success(
+            request,
+            f"Blog post '{post.title}' updated by {request.user.username}!"
+        )
         return redirect('blog:blog_detail', pk=post.pk)
-    
+
     return render(request, 'blog/blog_form.html', {
         'post': post,
         'action': 'Edit'
@@ -148,16 +161,19 @@ def delete_blog_post(request, pk):
     """Delete a blog post (admin only)"""
     post = get_object_or_404(BlogPost, pk=pk)
     title = post.title
-    
+
     if not request.user.is_staff:
         messages.error(request, 'Only admins can delete blog posts.')
         return redirect('blog:blog_detail', pk=pk)
-    
+
     if request.method == 'POST':
         post.delete()
-        messages.success(request, f"Blog post '{title}' deleted by {request.user.username}!")
+        messages.success(
+            request,
+            f"Blog post '{title}' deleted by {request.user.username}!"
+        )
         return redirect('blog:blog_list')
-    
+
     return render(request, 'blog/blog_confirm_delete.html', {'post': post})
 
 
@@ -170,13 +186,17 @@ def menu_list(request):
 def menu_item_reviews(request, pk):
     """Reviews for a specific menu item"""
     menu_item = get_object_or_404(MenuItem, pk=pk)
-    reviews = Review.objects.filter(menu_item=menu_item, approved=True).order_by('-created_at')
-    
+    reviews = Review.objects.filter(
+        menu_item=menu_item, approved=True
+    ).order_by('-created_at')
+
     # Check if user already reviewed this item
     user_review = None
     if request.user.is_authenticated:
-        user_review = Review.objects.filter(menu_item=menu_item, user=request.user).first()
-    
+        user_review = Review.objects.filter(
+            menu_item=menu_item, user=request.user
+        ).first()
+
     context = {
         'menu_item': menu_item,
         'reviews': reviews,
@@ -189,13 +209,19 @@ def menu_item_reviews(request, pk):
 def add_review(request, pk):
     """Add a review for a menu item"""
     menu_item = get_object_or_404(MenuItem, pk=pk)
-    
+
     # Check if user already reviewed this item
-    existing_review = Review.objects.filter(menu_item=menu_item, user=request.user).first()
+    existing_review = Review.objects.filter(
+        menu_item=menu_item, user=request.user
+    ).first()
     if existing_review:
-        messages.warning(request, 'You have already reviewed this item. Edit your existing review instead.')
+        messages.warning(
+            request,
+            'You have already reviewed this item. '
+            'Edit your existing review instead.'
+        )
         return redirect('blog:menu_item_reviews', pk=pk)
-    
+
     if request.method == 'POST':
         form = ReviewForm(request.POST)
         if form.is_valid():
@@ -205,12 +231,13 @@ def add_review(request, pk):
             review.save()
             messages.success(
                 request,
-                f"Thanks {request.user.username}, your review for {menu_item.name} was submitted and awaits approval."
+                f"Thanks {request.user.username}, your review for "
+                f"{menu_item.name} was submitted and awaits approval."
             )
             return redirect('blog:menu_item_reviews', pk=pk)
     else:
         form = ReviewForm()
-    
+
     return render(request, 'blog/review_form.html', {
         'form': form,
         'menu_item': menu_item,
@@ -222,19 +249,20 @@ def add_review(request, pk):
 def edit_review(request, pk):
     """Edit a review"""
     review = get_object_or_404(Review, pk=pk, user=request.user)
-    
+
     if request.method == 'POST':
         form = ReviewForm(request.POST, instance=review)
         if form.is_valid():
             form.save()
             messages.success(
                 request,
-                f"Updated your review for {review.menu_item.name}, {request.user.username}."
+                f"Updated your review for {review.menu_item.name}, "
+                f"{request.user.username}."
             )
             return redirect('blog:menu_item_reviews', pk=review.menu_item.pk)
     else:
         form = ReviewForm(instance=review)
-    
+
     return render(request, 'blog/review_form.html', {
         'form': form,
         'menu_item': review.menu_item,
@@ -247,15 +275,16 @@ def delete_review(request, pk):
     """Delete a review"""
     review = get_object_or_404(Review, pk=pk, user=request.user)
     menu_item_pk = review.menu_item.pk
-    
+
     if request.method == 'POST':
         review.delete()
         messages.success(
             request,
-            f"Deleted your review for {review.menu_item.name}, {request.user.username}."
+            f"Deleted your review for {review.menu_item.name}, "
+            f"{request.user.username}."
         )
         return redirect('blog:menu_item_reviews', pk=menu_item_pk)
-    
+
     return render(request, 'blog/review_confirm_delete.html', {
         'review': review
     })

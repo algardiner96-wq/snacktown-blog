@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 import os
 import dj_database_url
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -28,7 +29,10 @@ if os.path.isfile(BASE_DIR / "env.py"):
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!')
+SECRET_KEY = os.environ.get(
+    'SECRET_KEY',
+    'django-insecure-q7t2f3hls5(1aii!1t1ke6pj0ua@sq^%l+!9)su296xtki4-(!)'
+)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
@@ -42,11 +46,16 @@ default_allowed_hosts = [
 env_allowed_hosts = os.environ.get('ALLOWED_HOSTS', '')
 
 if env_allowed_hosts:
-    ALLOWED_HOSTS = [host.strip() for host in env_allowed_hosts.split(',') if host.strip()]
+    ALLOWED_HOSTS = [
+        host.strip() for host in env_allowed_hosts.split(',')
+        if host.strip()
+    ]
 else:
     ALLOWED_HOSTS = default_allowed_hosts
 
-CSRF_TRUSTED_ORIGINS = ['https://*.codeinstitute-ide.net', 'https://*.herokuapp.com']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.codeinstitute-ide.net', 'https://*.herokuapp.com'
+]
 # Application definition
 
 INSTALLED_APPS = [
@@ -100,7 +109,9 @@ db_url = os.environ.get('DATABASE_URL', '').strip()
 
 if db_url:
     DATABASES = {
-        'default': dj_database_url.parse(db_url, conn_max_age=600, ssl_require=True)
+        'default': dj_database_url.parse(
+            db_url, conn_max_age=600, ssl_require=True
+        )
     }
 else:
     DATABASES = {
@@ -116,16 +127,20 @@ else:
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'UserAttributeSimilarityValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'MinimumLengthValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'CommonPasswordValidator',
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': 'django.contrib.auth.password_validation.'
+                'NumericPasswordValidator',
     },
 ]
 
@@ -148,14 +163,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'), ]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATICFILES_STORAGE = (
+    'whitenoise.storage.CompressedManifestStaticFilesStorage'
+)
 # Prevent runtime 500s when a static asset is missing from the manifest
 WHITENOISE_MANIFEST_STRICT = False
 
 # Cloudinary configuration
-import cloudinary
-
-# Ensure secure (https) delivery from Cloudinary to avoid mixed-content warnings
+# Ensure secure (https) delivery from Cloudinary to avoid mixed-content
+# warnings
 cloudinary.config(secure=True)
 CLOUDINARY_STORAGE = {'SECURE': True}
 

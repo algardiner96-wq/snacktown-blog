@@ -9,12 +9,13 @@ User = get_user_model()
 class BlogPost(models.Model):
     """
     Model representing a blog post.
-    
-    """ 
+    """
 
     title = models.CharField(max_length=200)
     content = models.TextField()
-    author = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blog_posts')
+    author = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='blog_posts'
+    )
     image = CloudinaryField('image', blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
@@ -38,8 +39,12 @@ class Review(models.Model):
     """
     Model representing a review for a menu item.
     """
-    menu_item = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name='reviews')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
+    menu_item = models.ForeignKey(
+        MenuItem, on_delete=models.CASCADE, related_name='reviews'
+    )
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name='reviews'
+    )
     rating = models.PositiveSmallIntegerField(
         validators=[MinValueValidator(1), MaxValueValidator(5)]
     )
