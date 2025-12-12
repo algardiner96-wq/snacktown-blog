@@ -177,9 +177,9 @@ A big issue was accidentally uploading my env.py, so i had to change database an
 <summary><strong>Lighthouse & Testing</strong></summary>
 
 ### Lighthouse
-- Latest Lighthouse run: see [docs/testing/lighthouse.png](docs/testing/lighthouse.png) (replace if you capture separate desktop/mobile reports).
-- Coverage: home page focus (CLS/LCP); follow-up runs recommended after image swaps.
-- Plan: add responsiveness screenshots and any manual test notes under `docs/testing/`.
+- **Desktop:** [docs/testing/lighthouse.png](docs/testing/lighthouse.png)
+- **Mobile:** [docs/testing/lighthouse_mobile.png](docs/testing/lighthouse_mobile.png)
+- Coverage: home page focus (CLS/LCP); performance metrics tracked across device sizes.
 
 ### PEP 8 Style Testing
 All Python code has been validated for PEP 8 compliance using flake8.
